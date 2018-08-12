@@ -34,6 +34,8 @@ class DNNModel:
         # loop over the input images
         for imagePath in imagePaths:
             # load the image, pre-process it, and store it in the data list
+            imagePath = self.image_path + "/" + imagePath
+            print imagePath
             image = cv2.imread(imagePath)
             image = cv2.resize(image, (self.IMAGE_SIZE, self.IMAGE_SIZE))
             image = img_to_array(image)
@@ -55,10 +57,11 @@ class DNNModel:
         self.labels = np.array(self.labels)
 
     def build_model(self):
-        self.model = SqueezeNet(include_top=False, weights=None, classes=3)
+        self.model = SqueezeNet(include_top=True, weights=None, classes=3, input_shape=(self.IMAGE_SIZE, self.IMAGE_SIZE, 3))
+        self.model.summary()
         opt = Adam()
         self.model.compile(loss="binary_crossentropy", optimizer=opt, metrics=["accuracy"])
-        pass
+        return self.model
 
     def train(self):
         # split train and test set
@@ -68,7 +71,9 @@ class DNNModel:
         trainY = to_categorical(trainY, num_classes=3)
         testY = to_categorical(testY, num_classes=3)
 
-        self.model.fit(trainX, trainY, batch_size=32, epochs=10, verbose=1)
+        print trainX.shape
+        print trainY.shape
+        self.model.fit(trainX, trainY, batch_size=1, epochs=50, verbose=1)
 
         pass
 
@@ -91,9 +96,11 @@ class DNNModel:
         self.model = load_model("greenball_squeezenet.h5")
         pass
 
+    def test()
+
 
 if __name__ == '__main__':
-    dnn = DNNModel()
+    dnn = DNNModel(None)
     dnn.gen_training_image_set()
     dnn.train()
     dnn.save_model()
