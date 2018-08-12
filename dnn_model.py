@@ -73,8 +73,8 @@ class DNNModel:
 
         print trainX.shape
         print trainY.shape
-        self.model.fit(trainX, trainY, batch_size=1, epochs=50, verbose=1)
-
+        self.model.fit(trainX, trainY, batch_size=1, epochs=50, verbose=1, validation_data=(testX, testY))
+        self.test()
         pass
 
     def predict(self, img_frame):
@@ -96,8 +96,14 @@ class DNNModel:
         self.model = load_model("greenball_squeezenet.h5")
         pass
 
-    def test()
-
+    def test(self):
+        cnt = 0
+        for i in xrange(len(self.data)):
+            ret = self.model.predict(self.data[i])
+            pred = np.argmax(ret)
+            if pred == self.labels[i]
+                cnt += 1
+        print cnt
 
 if __name__ == '__main__':
     dnn = DNNModel(None)
