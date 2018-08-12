@@ -92,7 +92,7 @@ class DNNModel:
         self.model.save("greenball_squeezenet.h5")
         pass
 
-    def load_model(self):
+    def load_model(self, path):
         self.model = load_model("greenball_squeezenet.h5")
         pass
 
@@ -101,7 +101,7 @@ class DNNModel:
         for i in xrange(len(self.data)):
             ret = self.model.predict(self.data[i])
             pred = np.argmax(ret)
-            if pred == self.labels[i]
+            if pred == self.labels[i]:
                 cnt += 1
         print cnt
 
