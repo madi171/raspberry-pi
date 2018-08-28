@@ -82,7 +82,7 @@ class DNNModel:
         img_frame = img_to_array(img_frame)
         data = np.array([img_frame])
         # scale the raw pixel intensities to the range [0, 1]
-        self.data = np.array(data, dtype="float") / 255.0
+        data = np.array(data, dtype="float") / 255.0
 
         ret = self.model.predict(data)
 
