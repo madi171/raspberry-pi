@@ -56,6 +56,18 @@ class DNNModel:
         self.data = np.array(self.data, dtype="float") / 255.0
         self.labels = np.array(self.labels)
 
+
+    def add_training_sample(self, data, label):
+        image = cv2.resize(data, (self.IMAGE_SIZE, self.IMAGE_SIZE))
+        image = img_to_array(image)
+        self.data.append(image)
+        self.labels.append(label)
+
+    def scale_and_norm_training_samples(self):
+        # scale the raw pixel intensities to the range [0, 1]
+        self.data = np.array(self.data, dtype="float") / 255.0
+        self.labels = np.array(self.labels)
+
     def build_model(self):
         self.model = SqueezeNet(include_top=True, weights=None, classes=3, input_shape=(self.IMAGE_SIZE, self.IMAGE_SIZE, 3))
         self.model.summary()
@@ -91,11 +103,11 @@ class DNNModel:
         pass
 
     def save_model(self):
-        self.model.save("greenball_squeezenet.h5")
+        self.model.save("greenball_squeezenet_local.h5")
         pass
 
     def load_model(self, path):
-        self.model = load_model("greenball_squeezenet.h5")
+        self.model = load_model("greenball_squeezenet_local.h5")
         pass
 
     def test(self):
@@ -105,7 +117,7 @@ class DNNModel:
             pred = np.argmax(ret)
             if pred == self.labels[i]:
                 cnt += 1
-        print cnt
+        print "total correct number is %d" % cnt
 
 if __name__ == '__main__':
     dnn = DNNModel(None)
