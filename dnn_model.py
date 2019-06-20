@@ -39,6 +39,7 @@ class DNNModel:
             image = cv2.imread(imagePath)
             image = cv2.resize(image, (self.IMAGE_SIZE, self.IMAGE_SIZE))
             image = img_to_array(image)
+
             self.data.append(image)
 
             # extract the class label from the image path and update the
