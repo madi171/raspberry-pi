@@ -27,9 +27,9 @@ def pi_capture():
     is_capture_running = True
 
     while is_capture_running:
-        print "reading image..."
+        #print "reading image..."
         ret, img_frame = video_capture.read()
-        print "reading image done"
+        #print "reading image done"
         img_frame = cv2.resize(img_frame, (320, 200))
         cv2.imshow('frame', img_frame)
 
@@ -50,50 +50,50 @@ class MotorControlDemp:
         # init pygame parameters
         pygame.init()
         pygame.display.set_mode((100, 100))
-
-        motor_agent = Cars()
+        car = Cars()
         # motor_agent.stop
 
         time.sleep(0.1)
 
-        print "Start to control the car."
+        print "Start to control the car(w,s,a,d)"
 
         while is_capture_running:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     key_input = pygame.key.get_pressed()
 
-                    if key_input[pygame.K_w] and not key_input[pygame.K_a] and not key_input[pygame.K_d]:
+                    if key_input[pygame.K_w]:
                         print "Forward"
-                        # motor_agent.go_forward()
+                        car.go_forward()
                     elif key_input[pygame.K_a]:
                         print "Left"
-                        # motor_agent.turn_left()
+                        car.turn_left()
                         time.sleep(0.1)
                     elif key_input[pygame.K_d]:
                         print "Right"
-                        # motor_agent.turn_right()
+                        car.turn_right()
                         time.sleep(0.1)
                     elif key_input[pygame.K_s]:
                         print "Backward"
-                        # motor_agent.go_backward()
+                        car.go_backward()
                     elif key_input[pygame.K_k]:
-                        # motor_agent.stop()
+                        car.stop()
                         print "Stop K"
+                        is_capture_running = False
 
-                elif event.type == pygame.KEYUP:
-                    key_input = pygame.key.get_pressed()
+                # elif event.type == pygame.KEYUP:
+                #     key_input = pygame.key.get_pressed()
 
-                    if key_input[pygame.K_w] and not key_input[pygame.K_a] and not key_input[pygame.K_d]:
-                        print "Forward Up"
-                        # zth_car_control.go_forward()
+                #     if key_input[pygame.K_w] and not key_input[pygame.K_a] and not key_input[pygame.K_d]:
+                #         print "Forward Up"
+                #         # zth_car_control.go_forward()
 
-                    elif key_input[pygame.K_s] and not key_input[pygame.K_a] and not key_input[pygame.K_d]:
-                        print "Backward Up"
-                        # zth_car_control.go_backward()
-                    else:
-                        print "Stop \n"
-                        # zth_car_control.stop()
+                #     elif key_input[pygame.K_s] and not key_input[pygame.K_a] and not key_input[pygame.K_d]:
+                #         print "Backward Up"
+                #         # zth_car_control.go_backward()
+                #     else:
+                #         print "Stop \n"
+                #         # zth_car_control.stop()
             pass
 
 
