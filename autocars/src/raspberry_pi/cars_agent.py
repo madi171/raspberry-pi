@@ -10,11 +10,11 @@ import RPi.GPIO as GPIO
 Cars is the agent of vehicle, it contains many functions to control the cars
 
     Car motor directions:
-      ENB                ENA 
-    
-      IN3   | ------- |  IN1      
+      ENB                ENA
+
+      IN3   | ------- |  IN1
                  |
-                 | 
+                 |
                  |
                  |
       IN4   | ------- |  IN2
@@ -132,7 +132,6 @@ class Cars:
         GPIO.output(self.IN4, False)
         GPIO.output(self.LED1, False)  # LED1亮
         GPIO.output(self.LED2, False)  # LED1亮
-        self.set_speed(self.VIECLE_SPEED_HIGH)
 
     def go_backward(self):
         print 'motor_backward'
@@ -144,7 +143,6 @@ class Cars:
         GPIO.output(self.IN4, True)
         GPIO.output(self.LED1, True)  # LED1灭
         GPIO.output(self.LED2, False)  # LED2亮
-        self.set_speed(self.VIECLE_SPEED_HIGH)
 
     def turn_left(self):
         print 'motor_turnleft'
@@ -152,6 +150,7 @@ class Cars:
         self.cur_left_speed = max(self.cur_left_speed, self.VIECLE_SPEED_LOW)
         self.cur_right_speed += self.VIECLE_TURNING_SPEED
         self.cur_right_speed = min(self.cur_right_speed, self.VIECLE_SPEED_HIGH)
+        print 'turn left, set left_speed=%d right_speed=%d' % (self.cur_left_speed, self.cur_right_speed)
         self.ENA_pwm.ChangeDutyCycle(self.cur_left_speed)
         self.ENB_pwm.ChangeDutyCycle(self.cur_right_speed)
         self.go_forward()
@@ -162,6 +161,7 @@ class Cars:
         self.cur_right_speed = max(self.cur_right_speed, self.VIECLE_SPEED_LOW)
         self.cur_left_speed += self.VIECLE_TURNING_SPEED
         self.cur_left_speed = min(self.cur_left_speed, self.VIECLE_SPEED_HIGH)
+        print 'turn right, set left_speed=%d right_speed=%d' % (self.cur_left_speed, self.cur_right_speed)
         self.ENA_pwm.ChangeDutyCycle(self.cur_left_speed)
         self.ENB_pwm.ChangeDutyCycle(self.cur_right_speed)
         self.go_forward()
