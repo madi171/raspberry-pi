@@ -52,7 +52,7 @@ class Cars:
         Motor speed define
         '''
         self.VIECLE_SPEED_HIGH = 90     # high speed
-        self.VIECLE_SPEED_DEFAULT = 70  # default speed
+        self.VIECLE_SPEED_DEFAULT = 100  # default speed
         self.VIECLE_SPEED_LOW = 50      # low speed
         self.VIECLE_TURNING_SPEED = 1   # speed of turning wheel
 
@@ -146,25 +146,25 @@ class Cars:
 
     def turn_left(self):
         print 'motor_turnleft'
-        self.cur_left_speed -= self.VIECLE_TURNING_SPEED
-        self.cur_left_speed = max(self.cur_left_speed, self.VIECLE_SPEED_LOW)
-        self.cur_right_speed += self.VIECLE_TURNING_SPEED
-        self.cur_right_speed = min(self.cur_right_speed, self.VIECLE_SPEED_HIGH)
-        print 'turn left, set left_speed=%d right_speed=%d' % (self.cur_left_speed, self.cur_right_speed)
-        self.ENA_pwm.ChangeDutyCycle(self.cur_left_speed)
-        self.ENB_pwm.ChangeDutyCycle(self.cur_right_speed)
-        self.go_forward()
+        GPIO.output(self.ENA, True)
+        GPIO.output(self.ENB, True)
+        GPIO.output(self.IN1, True)
+        GPIO.output(self.IN2, False)
+        GPIO.output(self.IN3, False)
+        GPIO.output(self.IN4, True)
+        GPIO.output(self.LED1, False)  # LED1亮
+        GPIO.output(self.LED2, True)  # LED2灭
 
     def turn_right(self):
         print 'motor_turnright'
-        self.cur_right_speed -= self.VIECLE_TURNING_SPEED
-        self.cur_right_speed = max(self.cur_right_speed, self.VIECLE_SPEED_LOW)
-        self.cur_left_speed += self.VIECLE_TURNING_SPEED
-        self.cur_left_speed = min(self.cur_left_speed, self.VIECLE_SPEED_HIGH)
-        print 'turn right, set left_speed=%d right_speed=%d' % (self.cur_left_speed, self.cur_right_speed)
-        self.ENA_pwm.ChangeDutyCycle(self.cur_left_speed)
-        self.ENB_pwm.ChangeDutyCycle(self.cur_right_speed)
-        self.go_forward()
+        GPIO.output(self.ENA, True)
+        GPIO.output(self.ENB, True)
+        GPIO.output(self.IN1, False)
+        GPIO.output(self.IN2, True)
+        GPIO.output(self.IN3, True)
+        GPIO.output(self.IN4, False)
+        GPIO.output(self.LED1, False)  # LED1亮
+        GPIO.output(self.LED2, True)  # LED2灭
 
     def stop(self):
         print 'motor_stop'
