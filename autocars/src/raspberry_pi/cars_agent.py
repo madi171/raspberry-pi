@@ -52,9 +52,10 @@ class Cars:
         Motor speed define
         '''
         self.VIECLE_SPEED_HIGH = 90     # high speed
-        self.VIECLE_SPEED_DEFAULT = 100  # default speed
+        self.VIECLE_SPEED_DEFAULT = 100 # default speed
         self.VIECLE_SPEED_LOW = 50      # low speed
         self.VIECLE_TURNING_SPEED = 1   # speed of turning wheel
+        self.ACTION_PAUSE_TIME = 0.2    # time for action keeping
 
         '''
         Supersonic const define
@@ -122,7 +123,7 @@ class Cars:
         self.ENB_pwm.ChangeDutyCycle(speed_rate)
 
 
-    def go_forward(self):
+    def _go_forward(self):
         print 'motor_forward'
         GPIO.output(self.ENA, True)
         GPIO.output(self.ENB, True)
@@ -133,7 +134,7 @@ class Cars:
         GPIO.output(self.LED1, False)  # LED1亮
         GPIO.output(self.LED2, False)  # LED1亮
 
-    def go_backward(self):
+    def _go_backward(self):
         print 'motor_backward'
         GPIO.output(self.ENA, True)
         GPIO.output(self.ENB, True)
@@ -144,7 +145,7 @@ class Cars:
         GPIO.output(self.LED1, True)  # LED1灭
         GPIO.output(self.LED2, False)  # LED2亮
 
-    def turn_left(self):
+    def _turn_left(self):
         print 'motor_turnleft'
         GPIO.output(self.ENA, True)
         GPIO.output(self.ENB, True)
@@ -155,7 +156,7 @@ class Cars:
         GPIO.output(self.LED1, False)  # LED1亮
         GPIO.output(self.LED2, True)  # LED2灭
 
-    def turn_right(self):
+    def _turn_right(self):
         print 'motor_turnright'
         GPIO.output(self.ENA, True)
         GPIO.output(self.ENB, True)
@@ -176,6 +177,27 @@ class Cars:
         GPIO.output(self.IN4, False)
         GPIO.output(self.LED1, True)  # LED1灭
         GPIO.output(self.LED2, True)  # LED2亮
+
+
+    def forward(self):
+        self._go_forward()
+        time.sleep(self.ACTION_PAUSE_TIME)
+        self.stop()
+
+    def backward(self):
+        self._go_backward()
+        time.sleep(self.ACTION_PAUSE_TIME)
+        self.stop()
+
+    def left(self):
+        self._turn_left()
+        time.sleep(self.ACTION_PAUSE_TIME)
+        self.stop()
+
+    def right(self):
+        self._turn_right()
+        time.sleep(self.ACTION_PAUSE_TIME)
+        self.stop()
 
     def process_single_frame(self):
         # print "reading image..."

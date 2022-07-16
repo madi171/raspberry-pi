@@ -19,11 +19,10 @@ import cars_agent
 """
 
 is_capture_running = False
-video_capture = cv2.VideoCapture(0)
 
 def webcam_capture():
-    global is_capture_running, video_capture
-
+    global is_capture_running
+    video_capture = cv2.VideoCapture(0)
     # init the train_label array
     print("Start capture")
     is_capture_running = True
@@ -32,12 +31,13 @@ def webcam_capture():
         #print "reading image..."
         ret, img_frame = video_capture.read()
         #print "reading image done"
-        img_frame = cv2.resize(img_frame, (176, 144))
+        img_frame = cv2.resize(img_frame, (120, 80))
         cv2.imshow('frame', img_frame)
+        time.sleep(0.01)
 
         # sleep for a while and wait to quit
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+        #if cv2.waitKey(1) & 0xFF == ord('q'):
+        #    break
 
     print "Stop capture"
 
