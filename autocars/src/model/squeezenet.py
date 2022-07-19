@@ -61,8 +61,8 @@ def SqueezeNet(include_top=True, weights='imagenet',
                                       default_size=64,
                                       min_size=48,
                                       data_format=K.image_data_format(),
-                                      include_top=True)
-                                    #require_flatten = include_top)
+                                      #include_top=True,
+                                      require_flatten = include_top)
 
     if input_tensor is None:
         img_input = Input(shape=input_shape)
