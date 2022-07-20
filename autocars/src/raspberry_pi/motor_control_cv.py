@@ -11,6 +11,7 @@ sys.path.append('../model/')
 import cars_agent
 import train_control_model
 
+import cars_agent
 
 # from car_agent import Cars
 
