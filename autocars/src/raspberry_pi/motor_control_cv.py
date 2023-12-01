@@ -37,12 +37,17 @@ class MotorControlDemp:
         print "=== Initalization Done ==="
         pass
 
+    def process_captured_image(self, img_frame):
+        img_frame = cv2.resize(img_frame, (self.cam_width, self.cam_height))
+        img_frame = img_frame[int(self.cam_height/3):self.cam_height, 0:self.cam_width]
+        img_frame = cv2.cvtColor(img_frame, cv2.COLOR_BGR2GRAY) # set image to gray, reduce color noise
+        return img_frame
+
     def run_and_capture(self):
         while self.is_capture_running:
             # capture image from webcam live steam
             ret, img_frame = self.video_capture.read()
-            img_frame = cv2.resize(img_frame, (self.cam_width, self.cam_height))
-            img_frame = cv2.cvtColor(img_frame, cv2.COLOR_BGR2GRAY) # set image to gray, reduce color noise
+            img_frame = self.process_captured_image(img_frame)
             cv2.imshow('frame', img_frame) # render image frame to window
 
             key = cv2.waitKey(1) # read keyboard press within 1ms
@@ -90,27 +95,27 @@ class MotorControlDemp:
         while True:
             # capture image from webcam live steam
             ret, img_frame = self.video_capture.read()
-            img_frame = cv2.resize(img_frame, (self.cam_width, self.cam_height))
-            #img_frame = cv2.cvtColor(img_frame, cv2.COLOR_BGR2GRAY) # set image to gray, reduce color noise
+            img_frame = self.process_captured_image(img_frame)
             cv2.imshow('frame', img_frame) # render image frame to window
 
             pred = control_model.predict(img_frame)
+            print " > pred: %d" % pred
 
             if pred == 0:
-                self.car_agent.stop()
-                print "A:Stop"
-            elif pred == 1:
                 self.car_agent.left()
                 print "A:Left"
-            elif pred == 2:
+            elif pred == 1:
                 self.car_agent.right()
                 print "A:Right"
-            elif pred == 3:
+            elif pred == 2:
                 self.car_agent.forward()
                 print "A:Forward"
-            elif pred == 4:
+            elif pred == 3:
                 self.car_agent.backward()
                 print "A:Backward"
+            else:
+                print "A:NULL"
+                continue
 
             key = cv2.waitKey(1) # read keyboard press within 1ms
 
