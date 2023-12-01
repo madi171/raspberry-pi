@@ -48,6 +48,8 @@ class MotorControlDemp:
             # capture image from webcam live steam
             ret, img_frame = self.video_capture.read()
             img_frame = self.process_captured_image(img_frame)
+            img_frame = cv2.resize(img_frame, (self.cam_width, self.cam_height))
+            img_frame = cv2.cvtColor(img_frame, cv2.COLOR_BGR2GRAY) # set image to gray, reduce color noise
             cv2.imshow('frame', img_frame) # render image frame to window
 
             key = cv2.waitKey(1) # read keyboard press within 1ms
