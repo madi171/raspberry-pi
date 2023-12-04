@@ -9,7 +9,7 @@ import pygame
 import sys
 sys.path.append('../model/')
 import cars_agent
-import train_control_model
+import pretrained_driving_model
 
 
 # from car_agent import Cars
@@ -22,7 +22,7 @@ import train_control_model
 
 is_capture_running = False
 
-class MotorControlDemp:
+class AutoDrivingDemo:
     def __init__(self):
         self.car_agent = cars_agent.Cars()
 
@@ -39,8 +39,8 @@ class MotorControlDemp:
 
     def process_captured_image(self, img_frame):
         img_frame = cv2.resize(img_frame, (self.cam_width, self.cam_height))
-        img_frame = img_frame[int(self.cam_height/3):self.cam_height, 0:self.cam_width]
-        img_frame = cv2.cvtColor(img_frame, cv2.COLOR_BGR2GRAY) # set image to gray, reduce color noise
+        img_frame = img_frame[int(self.cam_height/3):self.cam_height, 0:self.cam_width] # clip the cam image
+        #img_frame = cv2.cvtColor(img_frame, cv2.COLOR_BGR2GRAY) # set image to gray, reduce color noise
         return img_frame
 
     def run_and_capture(self):
@@ -48,8 +48,6 @@ class MotorControlDemp:
             # capture image from webcam live steam
             ret, img_frame = self.video_capture.read()
             img_frame = self.process_captured_image(img_frame)
-            img_frame = cv2.resize(img_frame, (self.cam_width, self.cam_height))
-            img_frame = cv2.cvtColor(img_frame, cv2.COLOR_BGR2GRAY) # set image to gray, reduce color noise
             cv2.imshow('frame', img_frame) # render image frame to window
 
             key = cv2.waitKey(1) # read keyboard press within 1ms
@@ -91,8 +89,8 @@ class MotorControlDemp:
 
 
     def run_auto_mode(self, model_path):
-        control_model = train_control_model.ControlModel('')
-        control_model.load_model(model_path)
+        sd_model = pretrained_driving_model.SelfDrivingModel( '')
+        sd_model.load_model(model_path)
 
         while True:
             # capture image from webcam live steam
@@ -100,23 +98,22 @@ class MotorControlDemp:
             img_frame = self.process_captured_image(img_frame)
             cv2.imshow('frame', img_frame) # render image frame to window
 
-            pred = control_model.predict(img_frame)
-            print " > pred: %d" % pred
+            pred = sd_model.predict(img_frame)
+            print " -> pred: %d" % pred
+
+            # {'forward': 0, 'left': 1, 'right': 2}
 
             if pred == 0:
-                self.car_agent.left()
-                print "A:Left"
-            elif pred == 1:
-                self.car_agent.right()
-                print "A:Right"
-            elif pred == 2:
                 self.car_agent.forward()
-                print "A:Forward"
-            elif pred == 3:
-                self.car_agent.backward()
-                print "A:Backward"
+                print "Pred: Forward"
+            elif pred == 1:
+                self.car_agent.left()
+                print "Pred: Left"
+            elif pred == 2:
+                self.car_agent.right()
+                print "Pred: Right"
             else:
-                print "A:NULL"
+                print "Pred: NULL"
                 continue
 
             key = cv2.waitKey(1) # read keyboard press within 1ms
@@ -127,7 +124,7 @@ class MotorControlDemp:
                 break
 
 if __name__ == '__main__':
-    demo = MotorControlDemp()
+    demo = AutoDrivingDemo()
 
     # collect mode
     if len(sys.argv) > 1 and sys.argv[1] == "collect":
